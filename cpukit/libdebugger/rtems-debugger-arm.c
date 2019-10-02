@@ -1590,10 +1590,17 @@ target_exception(CPU_Exception_frame* frame)
  #define EXCEPTION_EXIT_THREAD(_frame)       EXCEPTION_EXIT_THREAD_V4(_frame)
  #define EXCEPTION_EXIT_EXC()                EXCEPTION_EXIT_EXC_V4()
 #elif defined(ARM_MULTILIB_ARCH_V7M)
- #define EXCEPTION_ENTRY_EXC()               (void) arm_switch_reg
- #define EXCEPTION_ENTRY_THREAD(_frame)      (_frame) = NULL
- #define EXCEPTION_EXIT_THREAD(_frame)       (_frame) = NULL
- #define EXCEPTION_EXIT_EXC()                (void) arm_switch_reg
+ #if ARM_THUMB_ONLY
+  #define EXCEPTION_ENTRY_EXC()
+  #define EXCEPTION_ENTRY_THREAD(_frame)      (_frame) = NULL
+  #define EXCEPTION_EXIT_THREAD(_frame)       (_frame) = NULL
+  #define EXCEPTION_EXIT_EXC()
+ #else
+  #define EXCEPTION_ENTRY_EXC()               (void) arm_switch_reg
+  #define EXCEPTION_ENTRY_THREAD(_frame)      (_frame) = NULL
+  #define EXCEPTION_EXIT_THREAD(_frame)       (_frame) = NULL
+  #define EXCEPTION_EXIT_EXC()                (void) arm_switch_reg
+ #endif
 #else
  #error ARM architecture is not supported.
 #endif
